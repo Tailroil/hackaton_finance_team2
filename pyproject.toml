@@ -3,13 +3,17 @@ name = "hackaton_finance_team2"
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
-    {name = "Tailroil", email = "romainrequena7@gmail.com"},
-    {name = "Alexandre Morel", email = "alexandre.morel@edu.devinci.fr"},
+    { name = "Tailroil", email = "romainrequena7@gmail.com" },
+    { name = "AlexandreFrancony", email = "alexandre.francony05@gmail.com" },
+    { name = "TartineLibre", email = "leonard.seidlitz@edu.devinci.fr" },
+    { name = "Raphoum", email = "raf.roux@gmail.com" },
+    { name = "Alexandre Morel", email = "alexandre.morel@edu.devinci.fr" },
+    { name = "MwaRPZ", email = "adrien.alpes@gmail.com" },
 ]
 dependencies = []
 requires-python = "==3.11.*"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 
 [tool.pdm]
