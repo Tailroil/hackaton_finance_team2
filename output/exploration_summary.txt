@@ -1,0 +1,39 @@
+
+╔════════════════════════════════════════════════════════════════╗
+║           RÉSUMÉ DE L'EXPLORATION                           ║
+╚════════════════════════════════════════════════════════════════╝
+
+DONNÉES CHARGÉES
+  • Transactions train : 210,000 lignes
+  • Labels fraude      : 210,000 transactions
+  • Transactions eval  : 90,000 lignes
+  • Users data         : 2,000 utilisateurs
+
+JOINTURE LABELS
+  • Transactions étiquetées : 210,000
+  • Taux de fraude          : 0.15%
+  • Ratio déséquilibre      : 1:665.7
+
+OLD-START
+  • Clients train           : 852
+  • Clients eval            : 362
+  • Overlap (connus)        : 0
+  • Cold-start (nouveaux)   : 362 (100.0%)
+
+MONTANTS
+  • Valeurs négatives       : 10,128
+  • Montant moyen (normal)  : $42.45
+  • Montant moyen (fraude)  : $111.91
+
+🕳️  DONNÉES MANQUANTES (Top 3)
+  • errors               :  98.44%
+  • zip                  :  12.76%
+  • merchant_state       :  12.11%
+
+╔════════════════════════════════════════════════════════════════╗
+║  PROCHAINES ÉTAPES                                          ║
+║  1. Preprocessing : features temporelles, encoding, agrégations║
+║  2. Stratégie cold-start : features transactionnelles          ║
+║  3. Baseline LightGBM avec validation temporelle              ║
+║  4. Intégration IBM watsonX                                    ║
+╚════════════════════════════════════════════════════════════════╝

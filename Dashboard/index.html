@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Détection de fraude — Rapport (IBM watsonx Hackathon)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <h1 class="title">Détection de transactions frauduleuses</h1>
+      <p class="subtitle">Hackathon IBM Data/IA — Intégration <b>watsonx.ai</b> (AutoAI + Notebook), <b>watsonx</b> Gouvernance (Fiche d’information), et livrables soumis.</p>
+      <div class="badges">
+        <span class="badge">Transactions train : 210000 lignes</span>
+        <span class="badge">Evaluation features : 90,000 lignes × 12 colonnes</span>
+        <span class="badge">Users data : 2,000 lignes × 14 colonnes</span>
+        <span class="badge">Cards data : 6,146 lignes × 13 colonnes</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="top">
+    <div class="wrap">
+      <a href="#contexte">Contexte</a>
+      <a href="#donnees">Jeu de données</a>
+      <a href="#methode">Méthodologie</a>
+      <a href="#features">Prétraitement & Features</a>
+      <a href="#modeles">Modélisation</a>
+      <a href="#resultats">Résultats</a>
+      <a href="#watsonx">watsonx — Intégration</a>
+      <a href="#soumission">Soumission</a>
+      <a href="#equipe">Équipe</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section id="contexte">
+      <span class="tag">Objectif</span>
+      <h2>Contexte & objectif</h2>
+      <p>Concevoir un modèle ML capable de prédire si une transaction est <b>frauduleuse</b> (1) ou <b>non frauduleuse</b> (0). Contraintes prises en compte : déséquilibre des classes, généralisation à de <i>nouveaux clients</i> et validation robuste.</p>
+    </section>
+
+    <section id="donnees">
+      <span class="tag">Données</span>
+      <h2>Jeu de données & sources</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Transactions (train)</h3>
+          <p>Transactions train : 210000 lignes</p>
+          <p class="muted">Variables transactionnelles : montants, date/heure, terminal, MCC, etc.</p>
+        </div>
+        <div class="card">
+          <h3>Transactions (évaluation)</h3>
+          <p>Evaluation features : 90,000 lignes × 12 colonnes</p>
+          <p class="muted">Sans label — utilisé uniquement pour l’inférence et la soumission.</p>
+        </div>
+        <div class="card">
+          <h3>Profils utilisateurs</h3>
+          <p>Users data : 2,000 lignes × 14 colonnes</p>
+        </div>
+        <div class="card">
+          <h3>Données cartes</h3>
+          <p>Cards data : 6,146 lignes × 13 colonnes</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="methode">
+      <span class="tag">Approche</span>
+      <h2>Méthodologie</h2>
+      <ul>
+        <li><b>EDA</b> rapide pour vérifier les schémas, valeurs manquantes et distributions.</li>
+        <li><b>Prétraitement</b> : normalisation des montants, features temporelles, encodage des catégories, variables dérivées (âge carte, pays, etc.).</li>
+        <li><b>Train/Test</b> via <code>train_test_split</code> et comparaison de trois modèles : Régression logistique, Random Forest, XGBoost.</li>
+        <li><b>Déséquilibre</b> : <code>class_weight='balanced'</code> (LogReg & RandomForest), <code>scale_pos_weight</code> pour XGBoost.</li>
+        <li><b>Métriques</b> : AUC-ROC, Precision, Recall, F1-score (focus sur la <b>PR-AUC</b> via AutoAI).</li>
+      </ul>
+    </section>
+
+    <section id="features">
+      <span class="tag">Prétraitement</span>
+      <h2>Features clés</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Ingénierie de variables</h3>
+          <ul><li><code>amount_abs</code></li><li><code>is_negative_amount</code></li><li><code>hour</code></li><li><code>day_of_week</code></li><li><code>day_of_month</code></li><li><code>month</code></li><li><code>is_weekend</code></li><li><code>is_night</code></li><li><code>mcc_encoded</code></li><li><code>merchant_id_encoded</code></li><li><code>merchant_city_encoded</code></li><li><code>merchant_state_encoded</code></li><li><code>use_chip_encoded</code></li><li><code>has_zip</code></li><li><code>has_error</code></li><li><code>card_type_encoded</code></li><li><code>credit_limit_log</code></li><li><code>user_age</code></li><li><code>user_country_encoded</code></li><li><code>card_age_days</code></li></ul>
+        </div>
+        <div class="card">
+          <h3>Encodage</h3>
+          <p>Encodage de variables catégorielles (Label/Ordinal/Frequency). <br>Nombre d’encodeurs persistés : <b>5</b>.</p>
+          <p>Gestion des manquants : remplissage contrôlé des dérivées numériques et drapeaux <code>has_* </code>.</p>
+        </div>
+      </div>
+
+      <div class="grid media">
+  <figure class="card fig">
+    <img src="img/vars.png" alt="Importance des variables — XGBoost">
+    <figcaption>Importance des variables — <b>XGBoost</b>.</figcaption>
+  </figure>
+</div>
+<details class="card">
+  <summary>Voir aussi l’importance des variables (Random Forest)</summary>
+  <img src="img/var_imp.png" alt="Importance des variables — Random Forest" style="width:100%;height:auto;border-radius:12px;margin-top:10px;">
+</details>
+</section>
+
+    <section id="modeles">
+      <span class="tag">Expériences</span>
+      <h2>Modèles évalués</h2>
+      <div class="card">
+        <p>Nous avons entraîné trois modèles de référence et conservé le meilleur pour la soumission finale.</p>
+        <table class='table'>
+<thead><tr><th>Modèle</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1-score</th><th>AUC</th></tr></thead>
+<tbody>
+<tr><td>Logistic Regression</td><td>0.886200</td><td>0.595054</td><td>0.992727</td><td>0.744090</td><td>0.964606</td></tr>
+<tr><td>Random Forest</td><td>0.999483</td><td>0.998331</td><td>0.998569</td><td>0.998450</td><td>0.999922</td></tr>
+<tr><td>XGBoost</td><td>0.999662</td><td>0.998689</td><td>0.999285</td><td>0.998987</td><td>0.999985</td></tr>
+</tbody>
+</table>
+        <p class="subtitle">Modèle retenu : <b>XGBoost</b> (meilleur compromis Accuracy/Recall/F1/AUC).</p>
+      </div>
+    
+<div class="grid media two">
+  <figure class="card fig compare-fig">
+    <img src="img/model_comp.png" alt="Comparaison des modèles sur les principales métriques (Accuracy, Precision, Recall, F1, AUC)">
+    <figcaption>Comparaison des modèles — synthèse des principales métriques.</figcaption>
+  </figure>
+  <figure class="card fig compare-fig">
+    <img src="img/modelsScore.png" alt="Scores détaillés des modèles">
+    <figcaption>Scores détaillés par modèle.</figcaption>
+  </figure>
+</div>
+</section>
+
+    <section id="resultats">
+      <span class="tag">Performance</span>
+      <h2>Résultats & interprétation</h2>
+      <ul>
+        <li><b>Très fortes performances</b> sur l’échantillon de test (AUC proche de 1.0). Nous surveillons les risques de surapprentissage et les fuites de données lors des itérations.</li>
+        <li><b>Seuil de décision</b> optimisable selon la précision souhaitée (ex. Recall élevé à Précision ≥ 90%).</li>
+        <li><b>Explicabilité</b> : importances de variables (XGBoost) et matrices de confusion par modèle.</li>
+      </ul>
+    
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/conf_matrix-XG.png" alt="Matrice de confusion — XGBoost (modèle retenu)">
+    <figcaption>Matrice de confusion — <b>XGBoost</b> (modèle retenu).</figcaption>
+  </figure>
+  <figure class="card fig">
+    <img src="img/conf_matrix-RandomF.png" alt="Matrice de confusion — Random Forest">
+    <figcaption>Matrice de confusion — Random Forest.</figcaption>
+  </figure>
+  <figure class="card fig">
+    <img src="img/conf_matrix-RegLog.png" alt="Matrice de confusion — Régression logistique">
+    <figcaption>Matrice de confusion — Régression logistique.</figcaption>
+  </figure>
+</div>
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/conf_matrix-watson.png" alt="Matrice de confusion — Watson">
+    <figcaption>Matrice de confusion — WatsonX - snap decision tree.</figcaption>
+  </figure>
+</div>
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/Transac_predict.png" alt="Répartition des transactions prédites (non fraude vs fraude)">
+    <figcaption>Répartition des transactions prédites (non fraude vs fraude).</figcaption>
+  </figure>
+</div>
+</section>
+
+    <section id="watsonx">
+      <span class="tag">watsonx</span>
+      <h2>Intégration IBM watsonx</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Studio & Données</h3>
+          <ul>
+            <li>Création d’un <b>Projet</b> watsonx.ai et import des actifs (CSV/JSON).</li>
+            <li>Notebook d’entraînement : préparation, features, entraînement, export du modèle.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Promotion du modèle</h3>
+          <p>Import du modèle entraîné (format pickle) dans un <b>Espace de déploiement</b> pour démonstration.</p>
+        </div>
+        <div class="card">
+          <h3>Gouvernance</h3>
+          <p>Création d’un <b>Cas d’utilisation</b> et d’une <b>Fiche d’information de l’IA</b> (données, splits, métriques, seuil, risques).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="equipe">
+      <span class="tag">Crédits</span>
+      <h2>Équipe n°2</h2>
+      <p>Alexandre FRANCONY, Alexandre MOREL, Adrien SERVAS, Raphaël ROUX, Léonard SEIDLITZ, Romain REQUENA</p>
+    </section>
+
+    <div class="footer">
+      <p>Hackathon IBM Data/IA — Détection de fraude.</p>
+    </div>
+  </main>
+</body>
+</html>
