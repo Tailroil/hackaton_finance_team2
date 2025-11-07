@@ -93,7 +93,18 @@
           <p>Gestion des manquants : remplissage contrôlé des dérivées numériques et drapeaux <code>has_* </code>.</p>
         </div>
       </div>
-    </section>
+    
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/vars.png" alt="Importance des variables — XGBoost">
+    <figcaption>Importance des variables — <b>XGBoost</b>.</figcaption>
+  </figure>
+</div>
+<details class="card">
+  <summary>Voir aussi l’importance des variables (Random Forest)</summary>
+  <img src="img/var_imp.png" alt="Importance des variables — Random Forest" style="width:100%;height:auto;border-radius:12px;margin-top:10px;">
+</details>
+</section>
 
     <section id="modeles">
       <span class="tag">Expériences</span>
@@ -110,7 +121,14 @@
 </table>
         <p class="subtitle">Modèle retenu : <b>XGBoost</b> (meilleur compromis Accuracy/Recall/F1/AUC).</p>
       </div>
-    </section>
+    
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/model_comp.png" alt="Comparaison des modèles sur les principales métriques (Accuracy, Precision, Recall, F1, AUC)">
+    <figcaption>Comparaison des modèles — synthèse des principales métriques.</figcaption>
+  </figure>
+</div>
+</section>
 
     <section id="resultats">
       <span class="tag">Performance</span>
@@ -120,7 +138,28 @@
         <li><b>Seuil de décision</b> optimisable selon la précision souhaitée (ex. Recall élevé à Précision ≥ 90%).</li>
         <li><b>Explicabilité</b> : importances de variables (XGBoost) et matrices de confusion par modèle.</li>
       </ul>
-    </section>
+    
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/conf_matrix-XG.png" alt="Matrice de confusion — XGBoost (modèle retenu)">
+    <figcaption>Matrice de confusion — <b>XGBoost</b> (modèle retenu).</figcaption>
+  </figure>
+  <figure class="card fig">
+    <img src="img/conf_matrix-RandomF.png" alt="Matrice de confusion — Random Forest">
+    <figcaption>Matrice de confusion — Random Forest.</figcaption>
+  </figure>
+  <figure class="card fig">
+    <img src="img/conf_matrix-RegLog.png" alt="Matrice de confusion — Régression logistique">
+    <figcaption>Matrice de confusion — Régression logistique.</figcaption>
+  </figure>
+</div>
+<div class="grid media">
+  <figure class="card fig">
+    <img src="img/Transac_predict.png" alt="Répartition des transactions prédites (non fraude vs fraude)">
+    <figcaption>Répartition des transactions prédites (non fraude vs fraude).</figcaption>
+  </figure>
+</div>
+</section>
 
     <section id="watsonx">
       <span class="tag">watsonx</span>
@@ -151,7 +190,7 @@
     </section>
 
     <div class="footer">
-      <p>© Hackathon IBM Data/IA — Détection de fraude. Ce rapport est généré à partir des notebooks fournis.</p>
+      <p>Hackathon IBM Data/IA — Détection de fraude.</p>
     </div>
   </main>
 </body>
