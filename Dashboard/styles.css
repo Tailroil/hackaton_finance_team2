@@ -44,3 +44,10 @@ code { background:#161a22; padding:2px 6px; border-radius:6px; border:1px solid 
 .tag { color: #b8c4d9; font-size: 12px; text-transform: uppercase; letter-spacing:.08em; }
 .ok { color: var(--ok); } .warn { color: var(--warn); }
 a.button { display:inline-block; padding:10px 14px; background: var(--acc); color:white; border-radius:10px; text-decoration:none; }
+
+/* media grid & figure styles */
+.grid.media { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.fig img { width: 100%; height: auto; display: block; border-radius: 12px; }
+.fig figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
+details.card { padding: 12px 16px; }
+details.card summary { cursor: pointer; color: var(--muted); }
